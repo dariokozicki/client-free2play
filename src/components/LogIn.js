@@ -66,9 +66,9 @@ export default class LogIn extends Component {
           </div>
           <div className="col-md-4">
             <ul className="list-group">
-              <h2 className="text-light">Say Hi to our newest users!</h2>
+              <h2 className="text-light">Say Hi to our latest users!</h2>
               {
-                this.state.users.map(user =>
+                this.state.users.slice(0, 6).map(user =>
                   <li className="list-group-item list-group-item-action" key={user._id}>
                     {user.username}
                   </li>)

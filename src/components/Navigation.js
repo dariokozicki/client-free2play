@@ -1,7 +1,20 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { Nav, Navbar } from 'react-bootstrap';
+import styled from 'styled-components'
 
-
+const MyNavLink = styled(Link)`
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0 10px 0 10px;
+  transition: all 200ms ease;
+  &:hover {
+    text-decoration: none;
+    color: #FF006E;
+    background-color: #4C5B5C;
+  }
+`;
 export default class Navigation extends Component {
   active = "Home";
   items = [
@@ -34,24 +47,30 @@ export default class Navigation extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <Link className="navbar-brand" to="/">FREE2PLAY</Link>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ml-auto">
-            {this.items.map(item =>
-              <li key={item.text} className={"nav-item " + this.active === item.text ? "active" : ""}>
-                <Link className="nav-link" to={item.to}>
-                  <i className={item.icon}></i>
-                  &nbsp; {item.text}
-                </Link>
-              </li>
-            )}
-          </ul>
-        </div>
-      </nav>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark"
+        style={{ paddingTop: "0", paddingBottom: "0" }}>
+        <Navbar.Brand>
+          <Link to="/" style={{
+            color: "#FF006E",
+            textDecoration: "none",
+            fontWeight: "bolder"
+          }}>
+            <img src='images/logo.png' alt="logo" style={{ height: "35px", paddingRight: "20px" }}></img>
+            FREE2PLAY
+          </Link>
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav" style={{ height: "45px" }}>
+          <Nav className="ml-auto" style={{ height: "100%" }}>
+            {this.items.map(item => (
+              <MyNavLink to={item.to} style={{ height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <i className={item.icon}></i>
+                <div style={{ paddingLeft: "13px", display: "inline" }}>{item.text}</div>
+              </MyNavLink>
+            ))}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar >
     )
   }
 }
