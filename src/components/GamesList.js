@@ -1,24 +1,51 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Pagination from 'react-bootstrap/Pagination'
 
-const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'localhost:4000';
 
 export default class GamesList extends Component {
   state = {
-    backendUrl: process.env.REACT_APP_BACKEND_URL || 'localhost:4000',
-    games: []
+    active: 1,
+    games: [],
+    total: null
   }
 
   componentDidMount = async () => {
-    console.log(BASE_URL)
-    const res = await axios.get((this.state.backendUrl + '/api/games'));
-    console.log(res.data);
-    this.setState({ games: res.data });
+    this.getGamePage(1);
+  }
+
+  getGamePage = async (pageNum) => {
+    const res = await axios.get((BASE_URL + '/api/games?pageNum=' + pageNum));
+    this.setState({ games: res.data.games, total: res.data.total, active: pageNum });
+    window.scrollTo(0, 0);
   }
 
   formatDateFromString(stringDate) {
     const date = new Date(stringDate);
     return date.toLocaleDateString()
+  }
+
+  paginate = () => {
+    let pages = [];
+    let amountPages = Math.ceil(this.state.total / 12);
+    pages.push(<Pagination.First key={-1} onClick={() => this.getGamePage(1)} />)
+    pages.push(<Pagination.Prev key={0} onClick={() => this.getGamePage((this.state.active === 1 ? 1 : this.state.active - 1))} />)
+    for (let i = this.state.active; i < this.state.active + 3; i++) {
+      pages.push(
+        <Pagination.Item key={i} active={i === this.state.active} onClick={() => this.getGamePage(i)}>
+          {i}
+        </Pagination.Item>
+      )
+    }
+    if (this.state.active <= amountPages - 4) {
+      pages.push(<Pagination.Ellipsis key={-2} />)
+      pages.push(<Pagination.Item key={amountPages} onClick={() => this.getGamePage(amountPages)}>{amountPages}</Pagination.Item>)
+    }
+    pages.push(<Pagination.Next key={amountPages + 1} onClick={() => this.getGamePage(this.state.active === 1 ? 1 : this.state.active + 1)} />)
+    pages.push(<Pagination.Last key={amountPages + 2} onClick={() => this.getGamePage(amountPages)} />)
+
+    return pages;
   }
 
   render() {
@@ -60,6 +87,7 @@ export default class GamesList extends Component {
           )
           }
         </div>
+        <Pagination style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>{this.paginate()}</Pagination>
       </div >
     )
   }
