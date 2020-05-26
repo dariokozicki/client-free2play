@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import Game from './Game'
 import Pagination from 'react-bootstrap/Pagination'
-
+import Form from 'react-bootstrap/Form'
 const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'localhost:4000';
 
 export default class GamesList extends Component {
   state = {
     active: 1,
     games: [],
+    search: '',
     total: null
   }
 
@@ -15,80 +17,108 @@ export default class GamesList extends Component {
     this.getGamePage(1);
   }
 
-  getGamePage = async (pageNum) => {
-    const res = await axios.get((BASE_URL + '/api/games?pageNum=' + pageNum));
-    this.setState({ games: res.data.games, total: res.data.total, active: pageNum });
+  getGamePage = async (pageNum, event) => {
+    let search;
+    if (event) {
+      event.preventDefault();
+      search = event.target.elements.search.value
+    } else {
+      search = ""
+    }
+    const params = {
+      pageNum: pageNum,
+      search: search
+    }
+    const res = await axios.get(
+      BASE_URL + '/api/games', {
+      params
+    });
+    this.setState({ games: res.data.games, total: res.data.total, active: pageNum, search: search });
     window.scrollTo(0, 0);
   }
 
-  formatDateFromString(stringDate) {
-    const date = new Date(stringDate);
-    return date.toLocaleDateString()
-  }
 
   paginate = () => {
     let pages = [];
+    const event = {
+      preventDefault: () => { },
+      target: {
+        elements: {
+          search: {
+            value: this.state.search
+          }
+        }
+      }
+    }
     let amountPages = Math.ceil(this.state.total / 12);
-    pages.push(<Pagination.First key={-1} onClick={() => this.getGamePage(1)} />)
-    pages.push(<Pagination.Prev key={0} onClick={() => this.getGamePage((this.state.active === 1 ? 1 : this.state.active - 1))} />)
-    for (let i = this.state.active; i < this.state.active + 3; i++) {
-      pages.push(
-        <Pagination.Item key={i} active={i === this.state.active} onClick={() => this.getGamePage(i)}>
-          {i}
-        </Pagination.Item>
-      )
+    if (amountPages >= 5) {
+      pages.push(<Pagination.First key={-1} onClick={() => this.getGamePage(1, event)} />)
+      pages.push(<Pagination.Prev key={0} onClick={() => this.getGamePage((this.state.active === 1 ? 1 : this.state.active - 1), event)} />)
+      if (this.state.active <= amountPages - 4) {
+        for (let i = this.state.active; i < this.state.active + 3; i++) {
+          pages.push(
+            <Pagination.Item key={i} active={i === this.state.active} onClick={() => this.getGamePage(i, event)}>
+              {i}
+            </Pagination.Item>
+          )
+        }
+        pages.push(<Pagination.Ellipsis key={-2} />)
+        pages.push(<Pagination.Item key={amountPages} onClick={() => this.getGamePage(amountPages, event)}>{amountPages}</Pagination.Item>)
+      } else {
+        for (let i = amountPages - 3; i <= amountPages; i++) {
+          pages.push(
+            <Pagination.Item key={i} active={i === this.state.active} onClick={() => this.getGamePage(i, event)}>
+              {i}
+            </Pagination.Item>
+          )
+        }
+      }
+      pages.push(<Pagination.Next key={amountPages + 1} onClick={() => this.getGamePage(this.state.active === amountPages ? amountPages : this.state.active + 1, event)} />)
+      pages.push(<Pagination.Last key={amountPages + 2} onClick={() => this.getGamePage(amountPages, event)} />)
+
+    } else {
+      for (let i = 1; i <= amountPages; i++) {
+        pages.push(
+          <Pagination.Item key={i} active={i === this.state.active} onClick={() => this.getGamePage(i, event)}>
+            {i}
+          </Pagination.Item>
+        )
+      }
     }
-    if (this.state.active <= amountPages - 4) {
-      pages.push(<Pagination.Ellipsis key={-2} />)
-      pages.push(<Pagination.Item key={amountPages} onClick={() => this.getGamePage(amountPages)}>{amountPages}</Pagination.Item>)
-    }
-    pages.push(<Pagination.Next key={amountPages + 1} onClick={() => this.getGamePage(this.state.active === 1 ? 1 : this.state.active + 1)} />)
-    pages.push(<Pagination.Last key={amountPages + 2} onClick={() => this.getGamePage(amountPages)} />)
 
     return pages;
+  }
+
+  showGames = () => {
+    if (this.state.games.length === 0) {
+      return <h5 style={{ color: "white" }}>No results were found to match your search item.</h5>
+    } else {
+      return (<div className="row" style={{ justifyContent: "space-between" }}>
+        {this.state.games.map(game =>
+          <Game game={game} />
+        )}
+      </div>)
+    }
   }
 
   render() {
     return (
       <div style={{ margin: "2.5rem 3rem 0 3rem", overflow: "visible" }}>
-        <div className="row" style={{ justifyContent: "space-between" }}>
-          {this.state.games.map(game =>
-            <div className="col-xs-12 col-sm-4 col-md-4 col-lg-3 col-xl-3" >
-              <div className="card box bg-secondary" style={{ marginBottom: "5vh", cursor: "pointer" }}>
-                <a href={game.url} >
-                  <img className="card-img-top"
-                    src={game.image}
-                    alt={game.title} />
-                </a>
-                <div style={{
-                  position: "absolute", top: "0",
-                  right: "0", backgroundColor: "#FF006E", width: "100px", color: "white", fontWeight: "bold"
-                }}>
-                  {game.category || 'Action'}
-                </div>
-                <div className="card-body">
-                  <h5 className="card-title text-light">
-                    {game.title}
-                  </h5>
-                  <div style={{ float: "left" }} className="card-text text-light">
-                    {game.publisher}
-                  </div>
-                  <div style={{ float: "right", fontWeight: "bold" }} className="card-text text-light">
-                    FREE
-                  </div>
-                </div>
-                <div className="card-footer">
-                  <small className="text-light">
-                    Last updated at {this.formatDateFromString(game.updatedAt)}
-                  </small>
-                </div>
-              </div>
-            </div>
-          )
-          }
-        </div>
-        <Pagination style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>{this.paginate()}</Pagination>
-      </div >
+        <Form onSubmit={(e) => this.getGamePage(1, e)}>
+          <Form.Group>
+            <Form.Control type="text" name="search" placeholder="Search by title, website of origin, category, or publisher" />
+            <Form.Text
+              style={{ color: "white" }}
+            >
+              i.e 'EpicGames', 'Witcher 3', 'Strategy'
+            </Form.Text>
+          </Form.Group>
+        </Form>
+        {this.showGames()}
+        <Pagination style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          {this.paginate()}
+        </Pagination>
+      </div>
     )
   }
 }

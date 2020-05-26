@@ -11,7 +11,10 @@ import Home from './components/Home';
 import About from './components/About';
 import Register from './components/Register';
 
+localStorage.setItem('favoriteGames', JSON.stringify([]))
+
 function App() {
+
   return (
     <Router>
       <Navigation />
@@ -24,6 +27,7 @@ function App() {
       <Route path="/games/:id" component={Game} />
       <Route path="/about" component={About} />
       <Route path="/register" component={Register} />
+      <Route path="/profile" component={UserProfile} />
     </Router>
   );
 }

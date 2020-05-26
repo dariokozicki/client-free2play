@@ -33,8 +33,8 @@ export default class Home extends Component {
           {this.state.images.map(image =>
             <Carousel.Item
               key={image.title}
-              style={{ 'height': "91vh" }}>
-              <img style={{ 'height': "91vh", objectFit: "cover" }}
+              style={{ 'height': "93vh" }}>
+              <img style={{ 'height': "93vh", objectFit: "cover" }}
                 className="d-block w-100"
                 src={image.src}
                 alt={image.desc}
