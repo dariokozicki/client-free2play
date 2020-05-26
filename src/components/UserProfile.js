@@ -10,7 +10,7 @@ export default class UserProfile extends Component {
     if (this.state.favorites.length === 0) {
       return <h5 style={{ color: "white" }}>You have no favorites yet.</h5>
     } else {
-      return (<div className="row" style={{ justifyContent: "space-between" }}>
+      return (<div className="row" style={{ justifyContent: "left" }}>
         {this.state.favorites.map(game =>
           <Game game={game} />
         )}

@@ -93,7 +93,7 @@ export default class GamesList extends Component {
     if (this.state.games.length === 0) {
       return <h5 style={{ color: "white" }}>No results were found to match your search item.</h5>
     } else {
-      return (<div className="row" style={{ justifyContent: "space-between" }}>
+      return (<div className="row" style={{ justifyContent: "left" }}>
         {this.state.games.map(game =>
           <Game game={game} />
         )}

@@ -11,7 +11,7 @@ import Home from './components/Home';
 import About from './components/About';
 import Register from './components/Register';
 
-localStorage.setItem('favoriteGames', JSON.stringify([]))
+localStorage.setItem('favoriteGames', localStorage.getItem('favoriteGames') || JSON.stringify([]))
 
 function App() {
 

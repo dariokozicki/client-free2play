@@ -10,11 +10,10 @@ export default class Game extends Component {
 
   addOrRemoveFromFavorites = (game) => {
     const favorites = JSON.parse(localStorage.getItem('favoriteGames'));
-    const storageGame = favorites.find(stgame => { console.log(stgame._id === game._id); return stgame._id === game.__id });
-    console.log(favorites)
-    if (storageGame) {
+    const storageGames = favorites.filter(stgame => { return stgame.title === game.title });
+    if (storageGames.length > 0) {
       localStorage.setItem('favoriteGames', JSON.stringify(
-        favorites.filter(stgame => stgame._id !== game.__id))
+        favorites.filter(stgame => stgame.title !== game.title))
       );
     } else {
       favorites.push(game);
