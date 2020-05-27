@@ -3,12 +3,6 @@
   flex-wrap: wrap;
 }
 
-.coso {
-  color: "white";
-  text-decoration: "none";
-  font-weight: "bolder"
-}
-
 .nav-item {
   margin: 0 10px 0 10px;
   -moz-user-select: none;
@@ -44,20 +38,25 @@
 }
 
 .pagination>.page-item.active>.page-link {
-  background-color: #FF006E;
-  border-color: #FF006E;
-  color: white;
+  background-color: rgb(var(--color-2));
+  border-color: rgb(var(--color-2));
+  color: rgb(var(--color-5));
 }
 
 #collasible-nav-dropdown {
   outline: 0;
   border: none;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
   -moz-outline-style: none;
   outline-style: hidden;
   color: white;
   font-weight: bold;
   text-decoration: none;
-  padding: 0 10px 0 10px;
+  padding: 0;
   margin: 0;
   transition: all 200ms ease;
   outline: 0;
@@ -66,12 +65,22 @@
   outline-style: hidden;
 }
 
-#collasible-nav-dropdown:hover {
-  text-decoration: none;
-  color: #FF006E;
+.dropdown-menu.show {
   background-color: #4C5B5C;
 }
 
-.dropdown-menu.show {
-  background-color: #4C5B5C;
+.card.box>i {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  color: rgb(var(--color-1));
+  transition: all 100ms ease;
+}
+
+.card.box>i:hover {
+  color: rgba(var(--color-3));
+}
+
+.card.box>i.favorite {
+  color: rgba(var(--color-3));
 }
