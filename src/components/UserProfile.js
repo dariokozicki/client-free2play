@@ -21,15 +21,32 @@ export default class UserProfile extends Component {
     }
   }
 
+  welcomeTitle = () => {
+    if (this.props.token) {
+      return "Welcome Back!"
+    } else {
+      return "Your Profile"
+    }
+  }
+
+  welcomeParagraph = () => {
+    if (this.props.token) {
+      return "Hey " + this.props.user.username + "! Nice to see you again. You can change your profile picture from now on."
+    } else {
+      return "You're signed in as a guest. If you'd like to save your favorites or upload an image, please log in or register."
+    }
+  }
+
   render() {
     return (
       <div className="container p-4" style={{ color: "white" }}>
         <div className="row">
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
-            <h1>Your profile</h1>
-            <h5>You're signed in as a guest. If you'd like to save your favorites or upload an image, please log in or register.</h5>
+            <h1>{this.welcomeTitle()}</h1>
+            <h5>{this.welcomeParagraph()}</h5>
+            <br></br>
           </div>
-          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" style={{ padding: "0px" }} >
+          <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" style={{ padding: "0px", display: "flex", justifyContent: "center" }} >
             <div style={{ position: "relative", width: "300px", height: "300px" }}>
               <Image src={this.props.user.image} fluid />
               <div style={{

@@ -29,7 +29,7 @@ export default class Register extends Component {
       alert("Password must be at least 4 characters long and have only letters and numbers.")
       return
     }
-    const res = await axios.post('http://localhost:4000/api/users',
+    const res = await axios.post(this.props.backend + '/api/users',
       {
         username: this.state.user.username,
         password: this.state.user.password,

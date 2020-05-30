@@ -12,6 +12,9 @@ import About from './components/About';
 import Register from './components/Register';
 import axios from 'axios'
 
+const backend_url = process.env.REACT_APP_BACKEND_URL
+
+
 export default class App extends React.Component {
   constructor(props) {
     super(props)
@@ -41,12 +44,12 @@ export default class App extends React.Component {
       localStorage.setItem('x-auth-token', token);
       let user;
       try {
-        user = await axios.get("http://localhost:4000/api/users/current")
+        user = await axios.get(backend_url + "/api/users/current")
       } catch (e) {
         localStorage.removeItem('x-auth-token')
       }
       if (user?.data) {
-        const favorites = await axios.get("http://localhost:4000/api/users/"
+        const favorites = await axios.get(backend_url + "/api/users/"
           + user.data._id
           + "/favorites")
         this.setState({ user: user.data, token: token, favorites: favorites.data })
@@ -57,7 +60,7 @@ export default class App extends React.Component {
   }
 
   signIn = async (username, password) => {
-    const login = await axios.post('http://localhost:4000/api/users/login',
+    const login = await axios.post(backend_url + '/api/users/login',
       {
         username: username,
         password: password
@@ -86,7 +89,7 @@ export default class App extends React.Component {
 
   addToFavorites = async (game) => {
     if (this.state.token) {
-      const res = await axios.put('http://localhost:4000/api/users/'
+      const res = await axios.put(backend_url + '/api/users/'
         + this.state.user._id
         + '/favorites',
         game
@@ -106,7 +109,7 @@ export default class App extends React.Component {
 
   removeFromFavorites = async (game) => {
     if (this.state.token) {
-      const res = await axios.delete('http://localhost:4000/api/users/'
+      const res = await axios.delete(backend_url + '/api/users/'
         + this.state.user._id
         + '/favorites/' + game._id
       );
@@ -126,7 +129,7 @@ export default class App extends React.Component {
   }
 
   updateFavorites = async () => {
-    const favorites = await axios.get('http://localhost:4000/api/users/'
+    const favorites = await axios.get(backend_url + '/api/users/'
       + this.state.user._id
       + '/favorites'
     );
@@ -141,7 +144,7 @@ export default class App extends React.Component {
         <Route path="/"
           component={Home} exact />
         <Route path="/signin"
-          render={(props) => <LogIn {...props} signIn={this.signIn} />} />
+          render={(props) => <LogIn {...props} signIn={this.signIn} backend={backend_url} />} />
         <Route path="/games"
           render={(props) =>
             <GamesList {...props}
@@ -154,7 +157,7 @@ export default class App extends React.Component {
         <Route path="/about"
           component={About} />
         <Route path="/register"
-          render={(props) => <Register {...props} signIn={this.signIn} />} />
+          render={(props) => <Register {...props} signIn={this.signIn} backend={backend_url} />} />
         <Route path="/profile"
           render={(props) =>
             <UserProfile {...props}
@@ -162,6 +165,7 @@ export default class App extends React.Component {
               favorites={this.state.favorites}
               addToFavorites={this.addToFavorites}
               removeFromFavorites={this.removeFromFavorites}
+              token={this.state.token}
             />} />
       </Router>
     );

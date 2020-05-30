@@ -31,7 +31,7 @@ export default class LogIn extends Component {
   }
 
   getUsers = async () => {
-    const res = await axios.get('http://localhost:4000/api/users');
+    const res = await axios.get(this.props.backend + '/api/users');
     this.setState({ users: res.data.reverse() });
   }
 

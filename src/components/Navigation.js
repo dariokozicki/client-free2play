@@ -159,7 +159,7 @@ export default class Navigation extends Component {
             {this.renderItems(this.navbarItems(), "center")}
           </Nav>
         </Navbar.Collapse>
-      </Navbar >
+      </Navbar>
     )
   }
 }
