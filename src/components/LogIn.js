@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import update from 'immutability-helper';
+import Toast from 'react-bootstrap/Toast'
 
 export default class LogIn extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      errorToast: {
+        username: false,
+        password: false
+      },
       users: [],
       username: '',
       password: ''
@@ -14,14 +20,18 @@ export default class LogIn extends Component {
 
   onSubmit = async event => {
     event.preventDefault();
+    let shouldReturn = false;
+    let state = this.state;
     if (!this.state.username || "" === this.state.username) {
-      alert("Username must not be empty");
-      return
+      state = update(state, { errorToast: { username: { $set: true } } })
+      shouldReturn |= true;
     }
-    if (!this.state.password || "" === this.state.username) {
-      alert("Password must not be empty");
-      return
+    if (!this.state.password || "" === this.state.password) {
+      state = update(state, { errorToast: { password: { $set: true } } })
+      shouldReturn |= true;
     }
+    this.setState(state);
+    if (shouldReturn) return;
     this.props.signIn(this.state.username, this.state.password);
   }
 
@@ -51,8 +61,32 @@ export default class LogIn extends Component {
     return (
       <div className="container p-4">
         <div className="row">
-          <div className="col-md-4"></div>
           <div className="col-md-4">
+            <Toast onClose={() => this.setState(
+              update(this.state, { errorToast: { username: { $set: false } } }))}
+              show={this.state.errorToast.username}
+              delay={3000}
+              autohide>
+              <Toast.Header>
+                <strong className="mr-auto">Free2Play</strong>
+                <small>Just now</small>
+              </Toast.Header>
+              <Toast.Body>Username must not be empty.</Toast.Body>
+            </Toast>
+            <Toast onClose={() => this.setState(
+              update(this.state, { errorToast: { password: { $set: false } } }))}
+              show={this.state.errorToast.password}
+              delay={3000}
+              autohide>
+              <Toast.Header>
+                <strong className="mr-auto">Free2Play</strong>
+                <small>Just now</small>
+              </Toast.Header>
+              <Toast.Body>Password must not be empty.</Toast.Body>
+            </Toast>
+            <br></br>
+          </div>
+          <div className="col-md-4" style={{ paddingBottom: "20px" }}>
             <div className="card card-body">
               <h3>Log in</h3>
               <form onSubmit={this.onSubmit}>
@@ -69,7 +103,7 @@ export default class LogIn extends Component {
                   <br />
                   <h5>Password</h5>
                   <input
-                    type="text"
+                    type="password"
                     className="form-control"
                     placeholder="Your secret password"
                     onChange={this.onChangePassword}

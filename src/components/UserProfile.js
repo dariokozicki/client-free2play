@@ -37,6 +37,8 @@ export default class UserProfile extends Component {
     }
   }
 
+
+
   render() {
     return (
       <div className="container p-4" style={{ color: "white" }}>
@@ -45,10 +47,14 @@ export default class UserProfile extends Component {
             <h1>{this.welcomeTitle()}</h1>
             <h5>{this.welcomeParagraph()}</h5>
             <br></br>
+            {this.props.token && <input type="file" accept="image/png, image/jpeg"
+              onChange={this.props.updatePicture}
+            />}
+            <br></br><br></br>
           </div>
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" style={{ padding: "0px", display: "flex", justifyContent: "center" }} >
             <div style={{ position: "relative", width: "300px", height: "300px" }}>
-              <Image src={this.props.user.image} fluid />
+              <Image src={this.props.user.image} fluid style={{ width: "300px", height: "300px", backgroundSize: "100%" }} />
               <div style={{
                 width: "100%",
                 height: "30px",

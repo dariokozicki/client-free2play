@@ -11,9 +11,8 @@ import Home from './components/Home';
 import About from './components/About';
 import Register from './components/Register';
 import axios from 'axios'
-
+import update from 'immutability-helper';
 const backend_url = process.env.REACT_APP_BACKEND_URL
-
 
 export default class App extends React.Component {
   constructor(props) {
@@ -97,7 +96,7 @@ export default class App extends React.Component {
       if (res.status === 201) {
         this.updateFavorites();
       } else {
-        alert('Algo salio mal');
+        alert('Something went wrong. Try again later.');
       }
     } else {
       let favorites = JSON.parse(localStorage.getItem('favoriteGames'));
@@ -116,7 +115,7 @@ export default class App extends React.Component {
       if (res.status === 204) {
         this.updateFavorites();
       } else {
-        alert('Algo salio mal');
+        alert('Something went wrong. Try again later.');
       }
     } else {
       let favorites = JSON.parse(localStorage.getItem('favoriteGames'));
@@ -134,6 +133,39 @@ export default class App extends React.Component {
       + '/favorites'
     );
     this.setState({ favorites: favorites.data })
+  }
+
+  updatePicture = async (event) => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", "Client-ID " + process.env.REACT_APP_CLIENT_ID);
+    var formdata = new FormData();
+    formdata.append("image", event.target.files[0]);
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: formdata,
+      redirect: 'follow'
+    };
+
+    const res = await fetch("https://api.imgur.com/3/image", requestOptions)
+    const imgData = await res.json();
+    if (imgData.data?.link) {
+      this.setState(update(this.state,
+        {
+          user:
+          {
+            image:
+              { $set: imgData.data.link }
+          }
+        })
+      );
+      const uploadServer = await axios.put(backend_url + "/api/users/" + this.state.user._id, {
+        image: imgData.data.link
+      })
+    } else {
+      alert("Could not upload image. Try again later.")
+    }
   }
 
   render = () => {
@@ -166,6 +198,7 @@ export default class App extends React.Component {
               addToFavorites={this.addToFavorites}
               removeFromFavorites={this.removeFromFavorites}
               token={this.state.token}
+              updatePicture={this.updatePicture}
             />} />
       </Router>
     );

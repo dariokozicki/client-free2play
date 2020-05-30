@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import Image from 'react-bootstrap/Image'
+import Spinner from 'react-bootstrap/Spinner'
+
 
 export default class Game extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: true
+    }
+  }
+
 
   formatDateFromString = (stringDate) => {
     const date = new Date(stringDate);
@@ -33,11 +42,16 @@ export default class Game extends Component {
       <div className="col-xs-12 col-sm-4 col-md-4 col-lg-3 col-xl-3">
         <div className="card box bg-secondary" style={{ marginBottom: "5vh", cursor: "pointer", height: "400px" }}>
           <a href={this.props.game.url} style={{ position: "relative" }}>
+            <Spinner animation="border" role="status" variant="info"
+              style={{ display: this.state.loading ? "block" : "none" }}>
+              <span className="sr-only">Loading...</span>
+            </Spinner>
             <Image
               src={this.props.game.image}
               alt={this.props.game.title}
               fluid
-              style={{ height: "200px" }}
+              style={{ height: "200px", display: this.state.loading ? "none" : "block" }}
+              onLoad={() => this.setState({ loading: false })}
             />
             <div style={{
               position: "absolute", bottom: "0", borderRadius: "20px 0 0 20px", paddingLeft: "10px",
