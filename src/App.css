@@ -84,3 +84,7 @@
 .card.box>i.favorite {
   color: rgba(var(--color-3));
 }
+
+.navbar-toggler-icon {
+  color: white;
+}

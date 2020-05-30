@@ -33,11 +33,6 @@ export default class GamesList extends Component {
       BASE_URL + '/api/games', {
       params
     });
-    const favoriteGames = JSON.parse(localStorage.getItem('favoriteGames'));
-    res.data.games.forEach(game => {
-      let storageGame = favoriteGames.find(stgame => stgame.title === game.title);
-      if (storageGame) game.isFavorite = true;
-    })
     this.setState({ games: res.data.games, total: res.data.total, active: pageNum, search: search });
     window.scrollTo(0, 0);
   }
@@ -100,7 +95,12 @@ export default class GamesList extends Component {
     } else {
       return (<div className="row" style={{ justifyContent: "left" }}>
         {this.state.games.map(game =>
-          <Game game={game} />
+          <Game
+            key={game._id}
+            game={game}
+            favorites={this.props.favorites}
+            addToFavorites={this.props.addToFavorites}
+            removeFromFavorites={this.props.removeFromFavorites} />
         )}
       </div>)
     }

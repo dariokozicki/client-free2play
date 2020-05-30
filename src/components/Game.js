@@ -3,34 +3,29 @@ import Image from 'react-bootstrap/Image'
 
 export default class Game extends Component {
 
-  constructor(props) {
-    super(props);
-    let state = {
-      game: props.game
-    }
-  }
-
   formatDateFromString = (stringDate) => {
     const date = new Date(stringDate);
     return date.toLocaleDateString()
   }
 
   addOrRemoveFromFavorites = (game) => {
-    const favorites = JSON.parse(localStorage.getItem('favoriteGames'));
-    const storageGames = favorites.filter(stgame => { return stgame.title === game.title });
-    if (storageGames.length > 0) {
-      game.isFavorite = false;
-      localStorage.setItem('favoriteGames', JSON.stringify(
-        favorites.filter(stgame => stgame.title !== game.title))
-      );
+    if (this.isFavorite()) {
+      this.props.removeFromFavorites(game)
     } else {
-      game.isFavorite = true;
-      favorites.push(game);
-      localStorage.setItem('favoriteGames', JSON.stringify(
-        favorites
-      ))
+      this.props.addToFavorites(game)
     }
-    this.setState({ game: game })
+  }
+
+  isFavorite = () => {
+    return this.props.favorites.some(
+      (fav) => fav.website === this.props.game.website &&
+        fav.websiteId === this.props.game.websiteId
+    )
+  }
+
+  getFavoriteCss = () => {
+    return this.isFavorite()
+      ? "favorite fas" : "far"
   }
 
   render() {
@@ -52,7 +47,7 @@ export default class Game extends Component {
             </div>
           </a>
           <i
-            class={"fa-star fa-2x " + (this.props.game.isFavorite ? "favorite fas" : "far")}
+            className={"fa-star fa-2x " + this.getFavoriteCss()}
             onClick={() => this.addOrRemoveFromFavorites(this.props.game)}
           >
           </i>

@@ -46,7 +46,7 @@ export default class About extends Component {
         <p>Below you'll find a FAQ in case you'd like to know more!</p>
         <Accordion>
           {this.state.qa.map((qaSet, idx) => (
-            <Card className="bg-secondary">
+            <Card className="bg-secondary" key={qaSet.question}>
               <Card.Header>
                 <Accordion.Toggle as={Button} variant="dark" eventKey={idx}>
                   {qaSet.question}

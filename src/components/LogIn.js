@@ -2,12 +2,28 @@ import React, { Component } from 'react'
 import axios from 'axios'
 
 export default class LogIn extends Component {
-
-  state = {
-    users: [],
-    username: ''
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      username: '',
+      password: ''
+    }
   }
 
+
+  onSubmit = async event => {
+    event.preventDefault();
+    if (!this.state.username || "" === this.state.username) {
+      alert("Username must not be empty");
+      return
+    }
+    if (!this.state.password || "" === this.state.username) {
+      alert("Password must not be empty");
+      return
+    }
+    this.props.signIn(this.state.username, this.state.password);
+  }
 
 
   componentDidMount = async () => {
@@ -16,12 +32,18 @@ export default class LogIn extends Component {
 
   getUsers = async () => {
     const res = await axios.get('http://localhost:4000/api/users');
-    this.setState({ users: res.data });
+    this.setState({ users: res.data.reverse() });
   }
 
   onChangeUsername = (e) => {
     this.setState({
       username: e.target.value
+    })
+  }
+
+  onChangePassword = (e) => {
+    this.setState({
+      password: e.target.value
     })
   }
 
@@ -33,7 +55,7 @@ export default class LogIn extends Component {
           <div className="col-md-4">
             <div className="card card-body">
               <h3>Log in</h3>
-              <form onSubmit={() => console.log("holi")}>
+              <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <br />
                   <h5>Username</h5>
@@ -50,7 +72,7 @@ export default class LogIn extends Component {
                     type="text"
                     className="form-control"
                     placeholder="Your secret password"
-                    onChange={this.onChangeUsername}
+                    onChange={this.onChangePassword}
 
                   />
                 Don't have an account? Register here
@@ -68,8 +90,8 @@ export default class LogIn extends Component {
             <ul className="list-group">
               <h2 className="text-light">Say Hi to our latest users!</h2>
               {
-                this.state.users.reverse().slice(0, 6).map(user =>
-                  <li className="list-group-item list-group-item-action" key={user._id}>
+                this.state.users.slice(0, 6).map(user =>
+                  <li className="list-group-item list-group-item-action" key={user.username}>
                     {user.username}
                   </li>)
               }
