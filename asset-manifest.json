@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/client-free2play/static/css/main.29d5e47f.chunk.css",
+    "main.js": "/client-free2play/static/js/main.ffea4b97.chunk.js",
+    "main.js.map": "/client-free2play/static/js/main.ffea4b97.chunk.js.map",
+    "runtime-main.js": "/client-free2play/static/js/runtime-main.28e8df9f.js",
+    "runtime-main.js.map": "/client-free2play/static/js/runtime-main.28e8df9f.js.map",
+    "static/css/2.af3c1da9.chunk.css": "/client-free2play/static/css/2.af3c1da9.chunk.css",
+    "static/js/2.dc2f8e58.chunk.js": "/client-free2play/static/js/2.dc2f8e58.chunk.js",
+    "static/js/2.dc2f8e58.chunk.js.map": "/client-free2play/static/js/2.dc2f8e58.chunk.js.map",
+    "index.html": "/client-free2play/index.html",
+    "precache-manifest.9133f307439bc92b86ef683bb3915057.js": "/client-free2play/precache-manifest.9133f307439bc92b86ef683bb3915057.js",
+    "service-worker.js": "/client-free2play/service-worker.js",
+    "static/css/2.af3c1da9.chunk.css.map": "/client-free2play/static/css/2.af3c1da9.chunk.css.map",
+    "static/css/main.29d5e47f.chunk.css.map": "/client-free2play/static/css/main.29d5e47f.chunk.css.map",
+    "static/js/2.dc2f8e58.chunk.js.LICENSE.txt": "/client-free2play/static/js/2.dc2f8e58.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.28e8df9f.js",
+    "static/css/2.af3c1da9.chunk.css",
+    "static/js/2.dc2f8e58.chunk.js",
+    "static/css/main.29d5e47f.chunk.css",
+    "static/js/main.ffea4b97.chunk.js"
+  ]
+}
