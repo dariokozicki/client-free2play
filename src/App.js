@@ -68,7 +68,7 @@ export default class App extends React.Component {
     if (login?.status === 200) {
       const token = login.headers['x-auth-token'];
       this.setUserData(token);
-      window.location = "/games"
+      window.location = "/"
     }
   }
 
@@ -84,6 +84,7 @@ export default class App extends React.Component {
         favorites: JSON.parse(localStorage.getItem('favoriteGames')) || []
       }
     )
+    window.location = "/"
   }
 
   addToFavorites = async (game) => {
