@@ -10,10 +10,20 @@ export default class Home extends Component {
         desc: 'Counter Strike: Global Offensive'
       },
       {
+        src: 'images/carousel4.jpg',
+        title: "Get 'Indie' today!",
+        desc: 'The Messenger: Picnic Panic'
+      },
+      {
         src: 'images/carousel2.jpg',
         title: "100% Free Games",
         desc: 'Warframe'
 
+      },
+      {
+        src: 'images/carousel5.jpg',
+        title: 'Filter by category',
+        desc: 'Seven: The Days Long Gone Demo'
       },
       {
         src: 'images/carousel3.jpg',

@@ -160,7 +160,7 @@ export default class App extends React.Component {
           }
         })
       );
-      const uploadServer = await axios.put(backend_url + "/api/users/" + this.state.user._id, {
+      axios.put(backend_url + "/api/users/" + this.state.user._id, {
         image: imgData.data.link
       })
     } else {

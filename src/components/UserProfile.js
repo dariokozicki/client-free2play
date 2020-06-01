@@ -42,7 +42,7 @@ export default class UserProfile extends Component {
   render() {
     return (
       <div className="container p-4" style={{ color: "white" }}>
-        <div className="row">
+        <div className="row" style={{ borderBottom: "1px solid #ccc", paddingBottom: "2rem", marginBottom: "2rem" }}>
           <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6" >
             <h1>{this.welcomeTitle()}</h1>
             <h5>{this.welcomeParagraph()}</h5>
@@ -61,15 +61,15 @@ export default class UserProfile extends Component {
                 position: "absolute",
                 backgroundColor: "rgba(var(--color-2),1)",
                 justifyContent: "center",
-                display: "flex"
+                display: "flex",
+                bottom: "0",
+                left: "0"
               }}>
                 <h5 style={{ fontWeight: "bolder" }}>{this.props.user.username}</h5>
               </div>
             </div>
           </div>
         </div>
-
-        <br></br><br></br>
         <i className="fas fa-star fa-2x" style={{ color: "rgb(var(--color-3))" }}></i><h3 style={{ display: "inline", marginLeft: "20px" }}>Favorites</h3>
         <br></br><br></br>
         {this.showGames()}
